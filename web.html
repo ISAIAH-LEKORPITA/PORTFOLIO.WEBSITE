@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Isaiah Lekorpita — Creative Technologist</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --blue-deep:   #0a2938;
+    --blue-ink:    #06141F;
+    --blue-line:   #3E6E8E;
+    --paper:       #F1EAD8;
+    --paper-dim:   #C9C2AE;
+    --signal:      #E8622C;
+    --grid-gap: 64px;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  html{scroll-behavior:smooth;}
+  body{
+    background:var(--blue-deep);
+    color:var(--paper);
+    font-family:'IBM Plex Sans', sans-serif;
+    background-image:
+      linear-gradient(var(--blue-line) 0.5px, transparent 0.5px),
+      linear-gradient(90deg, var(--blue-line) 0.5px, transparent 0.5px);
+    background-size: 32px 32px;
+    background-attachment: fixed;
+    background-blend-mode: normal;
+    position:relative;
+  }
+  body::before{
+    content:"";
+    position:fixed; inset:0;
+    background: radial-gradient(ellipse at 20% 0%, rgba(3, 3, 3, 0.05), transparent 60%);
+    pointer-events:none;
+    z-index:0;
+  }
+  ::selection{ background:var(--signal); color:var(--blue-ink); }
+
+  a{ color:inherit; }
+
+  .sheet{
+    max-width:1040px;
+    margin:0 auto;
+    padding:0 40px;
+    position:relative;
+    z-index:1;
+  }
+
+  #coord{
+    position:fixed;
+    top:16px; right:24px;
+    font-family:'IBM Plex Mono', monospace;
+    font-size:11px;
+    letter-spacing:0.06em;
+    color:var(--blue-line);
+    z-index:50;
+    pointer-events:none;
+    text-align:right;
+    line-height:1.6;
+  }
+  #coord span{ color:var(--signal); }
+
+  .regmark{
+    position:absolute;
+    width:14px; height:14px;
+  }
+  .regmark::before, .regmark::after{
+    content:""; position:absolute; background:var(--blue-line);
+  }
+  .regmark::before{ width:14px; height:0.5px; top:7px; left:0; }
+  .regmark::after{ width:0.5px; height:14px; top:0; left:7px; }
+  .rm-tl{ top:-1px; left:-1px; }
+  .rm-tr{ top:-1px; right:-1px; }
+  .rm-bl{ bottom:-1px; left:-1px; }
+  .rm-br{ bottom:-1px; right:-1px; }
+
+  nav{
+    position:sticky; top:0; z-index:40;
+    display:flex; align-items:center; justify-content:space-between;
+    padding:20px 40px;
+    background:rgba(19, 71, 139, 0.88);
+    backdrop-filter:blur(6px);
+    border-bottom:0.5px solid var(--blue-line);
+  }
+  .nav-mark{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:13px; letter-spacing:0.08em;
+    display:flex; align-items:center; gap:10px;
+  }
+  .nav-mark .dot{ width:7px; height:7px; border-radius:50%; background:var(--signal); }
+  .nav-links{ display:flex; gap:32px; font-family:'IBM Plex Mono', monospace; font-size:12px; letter-spacing:0.05em; }
+  .nav-links a{ text-decoration:none; color:var(--paper-dim); transition:color .2s; position:relative; }
+  .nav-links a:hover{ color:var(--paper); }
+  .nav-links a:focus-visible{ outline:1px solid var(--signal); outline-offset:4px; }
+
+  header.hero{
+    position:relative;
+    padding:120px 0 100px;
+    border-bottom:0.5px solid var(--blue-line);
+  }
+  .sheet-label{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:11px; letter-spacing:0.15em; text-transform:uppercase;
+    color:var(--blue-line);
+    margin-bottom:28px;
+    display:flex; align-items:center; gap:10px;
+  }
+  .sheet-label::before{ content:""; width:24px; height:0.5px; background:var(--blue-line); }
+  h1.title{
+    font-family:'Fraunces', serif;
+    font-weight:500;
+    font-size:clamp(48px, 8vw, 92px);
+    line-height:0.98;
+    letter-spacing:-0.01em;
+    max-width:820px;
+  }
+  h1.title em{ font-style:italic; color:var(--signal); font-weight:400; }
+  .hero-sub{
+    margin-top:32px;
+    max-width:520px;
+    font-size:17px;
+    line-height:1.65;
+    color:var(--paper-dim);
+  }
+  .hero-meta{
+    margin-top:56px;
+    display:flex; gap:48px;
+    font-family:'IBM Plex Mono', monospace;
+    font-size:12px;
+    color:var(--blue-line);
+  }
+  .hero-meta div span{ display:block; color:var(--paper); font-size:13px; margin-top:6px; }
+
+  section{ position:relative; padding:90px 0; border-bottom:0.5px solid var(--blue-line); }
+  section:last-of-type{ border-bottom:none; }
+  .section-head{
+    display:flex; align-items:baseline; justify-content:space-between;
+    margin-bottom:52px; flex-wrap:wrap; gap:12px;
+  }
+  .section-num{
+    font-family:'IBM Plex Mono', monospace; font-size:11px; letter-spacing:0.15em;
+    color:var(--blue-line); text-transform:uppercase;
+  }
+  h2.section-title{
+    font-family:'Fraunces', serif; font-weight:500; font-size:34px;
+    letter-spacing:-0.01em;
+  }
+
+  .about-grid{
+    display:grid; grid-template-columns: 1.1fr 0.9fr; gap:var(--grid-gap);
+    align-items:start;
+  }
+  .about-grid p{ font-size:16px; line-height:1.75; color:var(--paper-dim); max-width:520px; }
+  .about-grid p + p{ margin-top:18px; }
+  .specs{
+    font-family:'IBM Plex Mono', monospace; font-size:12.5px;
+    border:0.5px solid var(--blue-line);
+    padding:22px 24px;
+  }
+  .specs .row{ display:flex; justify-content:space-between; padding:9px 0; border-bottom:0.5px solid rgba(62,110,142,0.4); }
+  .specs .row:last-child{ border-bottom:none; }
+  .specs .row span:first-child{ color:var(--blue-line); }
+
+  .projects{ display:flex; flex-direction:column; }
+  .project{
+    display:grid; grid-template-columns: 90px 1fr 200px;
+    gap:28px; align-items:start;
+    padding:32px 0;
+    border-top:0.5px solid var(--blue-line);
+    position:relative;
+    transition: background .25s;
+  }
+  .project:hover{ background:rgba(241,234,216,0.03); }
+  .project:last-child{ border-bottom:0.5px solid var(--blue-line); }
+  .proj-id{ font-family:'IBM Plex Mono', monospace; font-size:12px; color:var(--signal); padding-top:4px; }
+  .proj-body h3{
+    font-family:'Fraunces', serif; font-weight:500; font-size:23px; margin-bottom:8px;
+  }
+  .proj-body p{ font-size:14.5px; line-height:1.6; color:var(--paper-dim); max-width:480px; }
+  .proj-tags{ display:flex; flex-wrap:wrap; gap:6px; margin-top:14px; }
+  .proj-tags span{
+    font-family:'IBM Plex Mono', monospace; font-size:10.5px;
+    border:0.5px solid var(--blue-line); color:var(--blue-line);
+    padding:3px 8px; letter-spacing:0.04em;
+  }
+  .proj-meta{
+    font-family:'IBM Plex Mono', monospace; font-size:11.5px; color:var(--blue-line);
+    text-align:right; padding-top:4px;
+  }
+  .proj-meta a{
+    display:inline-block; margin-top:12px; color:var(--paper);
+    text-decoration:none; border-bottom:0.5px solid var(--signal);
+    padding-bottom:2px; font-size:11.5px;
+  }
+  .proj-meta a:hover{ color:var(--signal); }
+
+  .skill-grid{
+    display:grid; grid-template-columns:repeat(3, 1fr); gap:1px;
+    background:var(--blue-line);
+    border:0.5px solid var(--blue-line);
+  }
+  .skill-cell{
+    background:var(--blue-deep); padding:26px 24px;
+  }
+  .skill-cell h4{
+    font-family:'IBM Plex Mono', monospace; font-size:11px; letter-spacing:0.1em;
+    color:var(--signal); text-transform:uppercase; margin-bottom:14px;
+  }
+  .skill-cell ul{ list-style:none; }
+  .skill-cell li{
+    font-size:14px; color:var(--paper-dim); padding:5px 0; line-height:1.5;
+  }
+
+  footer{ padding:100px 0 60px; }
+  .contact-inner{ display:flex; justify-content:space-between; align-items:flex-end; flex-wrap:wrap; gap:40px; }
+  h2.big-cta{
+    font-family:'Fraunces', serif; font-weight:500;
+    font-size:clamp(36px, 6vw, 60px);
+    line-height:1.05; max-width:640px;
+  }
+  h2.big-cta a{
+    text-decoration:none; border-bottom:2px solid var(--signal);
+  }
+  h2.big-cta a:hover{ color:var(--signal); }
+  .contact-list{
+    font-family:'IBM Plex Mono', monospace; font-size:13px;
+    display:flex; flex-direction:column; gap:12px; text-align:right;
+  }
+  .contact-list a{ text-decoration:none; color:var(--paper-dim); }
+  .contact-list a:hover{ color:var(--signal); }
+  .footnote{
+    margin-top:80px; padding-top:24px; border-top:0.5px solid var(--blue-line);
+    display:flex; justify-content:space-between; flex-wrap:wrap; gap:12px;
+    font-family:'IBM Plex Mono', monospace; font-size:11px; color:var(--blue-line);
+  }
+
+  .reveal{ opacity:0; transform:translateY(18px); transition:opacity .7s ease, transform .7s ease; }
+  .reveal.in{ opacity:1; transform:translateY(0); }
+
+  @media (prefers-reduced-motion: reduce){
+    .reveal{ opacity:1; transform:none; transition:none; }
+    html{ scroll-behavior:auto; }
+  }
+
+  @media (max-width:860px){
+    .about-grid{ grid-template-columns:1fr; }
+    .project{ grid-template-columns:1fr; gap:12px; }
+    .proj-meta{ text-align:left; }
+    .skill-grid{ grid-template-columns:1fr; }
+    .nav-links{ display:none; }
+    .hero-meta{ flex-wrap:wrap; row-gap:24px; }
+    .contact-list{ text-align:left; align-items:flex-start; }
+  }
+</style>
+</head>
+<body>
+
+<div id="coord">X: <span id="cx">000</span> &nbsp; Y: <span id="cy">000</span></div>
+
+<nav>
+  <div class="nav-mark"><span class="dot"></span> ISAIAH LEKORPITA / PORTFOLIO</div>
+  <div class="nav-links">
+    <a href="#about">About</a>
+    <a href="#work">Work</a>
+    <a href="#skills">Skills</a>
+    <a href="#contact">Contact</a>
+  </div>
+</nav>
+
+<header class="hero sheet">
+  <div class="regmark rm-bl"></div>
+  <div class="regmark rm-br"></div>
+  <div class="sheet-label">Sheet 00 — Cover</div>
+  <h1 class="title">Building things<br>that respond <em>to you.</em></h1>
+  <p class="hero-sub">Isaiah Lekorpita — creative technologist working across interaction design, generative systems, and installation. I sketch in code and build things people can put their hands on.</p>
+  <div class="hero-meta">
+    <div>Based in<span>Samburu, remote-friendly</span></div>
+    <div>Practice<span>Interaction design + code</span></div>
+    <div>Currently<span>Open for select projects</span></div>
+  </div>
+</header>
+
+<section id="about" class="sheet reveal">
+  <div class="regmark rm-tl"></div>
+  <div class="regmark rm-tr"></div>
+  <div class="section-head">
+    <span class="section-num">Sheet 01 — Profile</span>
+    <h2 class="section-title">About the practice</h2>
+  </div>
+  <div class="about-grid">
+    <div>
+      <p>I work at the seam between design and engineering — prototyping fast, then building the real thing myself. Most projects start as a rough sketch on paper and end up as a working piece of software, hardware, or both.</p>
+      <p>Recent work spans data-driven installations, small tools for other designers, and interfaces for teams who need to see complex systems clearly. I care most about the moment something on screen starts to feel alive.</p>
+    </div>
+    <div class="specs">
+      <div class="row"><span>Experience</span><span>8 years</span></div>
+      <div class="row"><span>Focus</span><span>Interaction, generative, prototyping</span></div>
+      <div class="row"><span>Tools</span><span>TypeScript, WebGL, Python, Arduino</span></div>
+      <div class="row"><span>Availability</span><span>Q4 2026</span></div>
+      <div class="row"><span>Format</span><span>Freelance / contract</span></div>
+    </div>
+  </div>
+</section>
+
+<section id="work" class="sheet reveal">
+  <div class="regmark rm-tl"></div>
+  <div class="regmark rm-tr"></div>
+  <div class="section-head">
+    <span class="section-num">Sheet 02 — Selected work</span>
+    <h2 class="section-title">Projects</h2>
+  </div>
+  <div class="projects">
+
+    <div class="project">
+      <div class="proj-id">01</div>
+      <div class="proj-body">
+        <h3>Tidal — generative sound installation</h3>
+        <p>A gallery installation that turns live tide and weather data into an evolving ambient score, rendered across an eight-channel speaker array.</p>
+        <div class="proj-tags"><span>Web Audio</span><span>Data viz</span><span>Installation</span></div>
+      </div>
+      <div class="proj-meta">2025 / Gallery commission<br><a href="#">View case study</a></div>
+    </div>
+
+    <div class="project">
+      <div class="proj-id">02</div>
+      <div class="proj-body">
+        <h3>Fieldkit — sensor toolkit for researchers</h3>
+        <p>An open-source hardware and software kit that lets field researchers log environmental data without writing code, built for a conservation nonprofit.</p>
+        <div class="proj-tags"><span>Hardware</span><span>React</span><span>Open source</span></div>
+      </div>
+      <div class="proj-meta">2024 / Product design<br><a href="#">View case study</a></div>
+    </div>
+
+    <div class="project">
+      <div class="proj-id">03</div>
+      <div class="proj-body">
+        <h3>Loom — collaborative diagramming tool</h3>
+        <p>A real-time whiteboard built for distributed engineering teams, with a focus on keyboard-first navigation and legible system diagrams at scale.</p>
+        <div class="proj-tags"><span>TypeScript</span><span>Canvas</span><span>Product</span></div>
+      </div>
+      <div class="proj-meta">2023 / Startup, 0→1<br><a href="#">View case study</a></div>
+    </div>
+
+    <div class="project">
+      <div class="proj-id">04</div>
+      <div class="proj-body">
+        <h3>Census — census-data explorer</h3>
+        <p>A public-facing visualization tool letting journalists explore twenty years of national census data by region, translated into plain language summaries.</p>
+        <div class="proj-tags"><span>D3.js</span><span>Editorial</span><span>Civic tech</span></div>
+      </div>
+      <div class="proj-meta">2022 / Newsroom partnership<br><a href="#">View case study</a></div>
+    </div>
+
+  </div>
+</section>
+
+<section id="skills" class="sheet reveal">
+  <div class="regmark rm-tl"></div>
+  <div class="regmark rm-tr"></div>
+  <div class="section-head">
+    <span class="section-num">Sheet 03 — Capabilities</span>
+    <h2 class="section-title">Tools of the trade</h2>
+  </div>
+  <div class="skill-grid">
+    <div class="skill-cell">
+      <h4>Design</h4>
+      <ul>
+        <li>Interaction design</li>
+        <li>Rapid prototyping</li>
+        <li>Motion and micro-interaction</li>
+        <li>Design systems</li>
+      </ul>
+    </div>
+    <div class="skill-cell">
+      <h4>Engineering</h4>
+      <ul>
+        <li>TypeScript / React</li>
+        <li>WebGL / Three.js</li>
+        <li>Python / data pipelines</li>
+        <li>Embedded / Arduino</li>
+      </ul>
+    </div>
+    <div class="skill-cell">
+      <h4>Practice</h4>
+      <ul>
+        <li>Workshop facilitation</li>
+        <li>Technical writing</li>
+        <li>Client presentation</li>
+        <li>Cross-functional collaboration</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<footer id="contact" class="sheet reveal">
+  <div class="regmark rm-tl"></div>
+  <div class="regmark rm-tr"></div>
+  <div class="contact-inner">
+    <h2 class="big-cta">Have a project in mind? <a href="mailto:isaiahlekorpita@gmail.com">Let's talk it through.</a></h2>
+    <div class="contact-list">
+      <a href="mailto:isaiahlekorpita@gmail.com">isaiahlekorpita@gmail.com</a>
+      <a href="#">Instagram</a>
+      <a href="#">GitHub</a>
+      <a href="#">LinkedIn</a>
+    </div>
+  </div>
+  <div class="footnote">
+    <span>Drafted 2026 — revision 03</span>
+    <span>Samburu, KE</span>
+  </div>
+</footer>
+
+<script>
+  const cx = document.getElementById('cx');
+  const cy = document.getElementById('cy');
+  window.addEventListener('mousemove', (e) => {
+    cx.textContent = String(e.clientX).padStart(3, '0');
+    cy.textContent = String(e.clientY).padStart(3, '0');
+  });
+
+  const revealEls = document.querySelectorAll('.reveal');
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if(entry.isIntersecting){
+        entry.target.classList.add('in');
+        io.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.12 });
+  revealEls.forEach(el => io.observe(el));
+</script>
+
+</body>
+</html>
